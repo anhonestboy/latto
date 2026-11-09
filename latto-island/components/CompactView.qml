@@ -100,7 +100,7 @@ Item {
     }
 
     Layer {
-        shown: root.mode === "idle"
+        shown: root.mode === "idle" && root.hasIndicators  // locale: a riposo niente sotto il notch
 
         Row {
             anchors.left: parent.left

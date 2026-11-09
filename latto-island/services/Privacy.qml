@@ -15,14 +15,15 @@ QtObject {
     readonly property bool active: Settings.privacyIndicators && (microphone || camera || recording)
 
     // One probe prints "<mic streams> <recording 0|1> <camera 0|1>".
-    //  - mic: capture streams on real inputs; monitor sources (audio
+    //  - mic: capture streams on real inputs (locale: ignores corked streams and
+    //    Asahi/PipeWire effect nodes like audio_effect.j314-mic); monitor sources (audio
     //    visualizers, screen recorders capturing system sound) do not count.
     //  - camera: any of the user's processes holding a /dev/video* device.
     //  - recording: known screen recorders. Process names are truncated to
     //    15 characters, hence "gpu-screen-reco".
     readonly property string script: [
         "mons=$(pactl list short sources 2>/dev/null | awk '$2 ~ /\\.monitor$/ {print $1}' | tr '\\n' ' ')",
-        "mic=$(pactl list short source-outputs 2>/dev/null | awk -v m=\"$mons\" 'BEGIN { n = split(m, a, \" \"); for (i = 1; i <= n; i++) mon[a[i]] = 1 } !($2 in mon)' | wc -l)",
+        `mic=$(LC_ALL=C pactl list source-outputs 2>/dev/null | awk -v m="$mons" 'BEGIN{n=split(m,a," ");for(i=1;i<=n;i++)mon[a[i]]=1} /^Source Output/{if(on&&!bad)k++;on=1;bad=0} /Corked: yes/{bad=1} /^[[:space:]]+Source: [0-9]/{if($2 in mon)bad=1} /node.name = "(audio_effect|effect_)/{bad=1} END{if(on&&!bad)k++;print k+0}')`,
         "rec=0; for p in wf-recorder wl-screenrec gpu-screen-reco obs; do pgrep -x \"$p\" >/dev/null && rec=1; done",
         "cam=$(find /proc/[0-9]*/fd -maxdepth 1 -lname '/dev/video*' 2>/dev/null | head -n1 | wc -l)",
         "echo \"$mic $rec $cam\""

@@ -45,12 +45,15 @@ QtObject {
     }
 
     // Island geometry
-    readonly property int topMargin: 8
+    readonly property int topMargin: 0
     readonly property int compactHeight: 36
     readonly property int idleWidth: 210
     readonly property int activityWidth: 340
     readonly property int expandedWidth: 600
-    readonly property int expandedHeight: 276
+    // locale: notch fisico del MacBook (px logici); l'isola aperta parte sotto di esso
+    readonly property int notchWidth: 190
+    readonly property int notchHeight: 32
+    readonly property int expandedHeight: 276 + notchHeight
     readonly property int expandedRadius: 34
     readonly property int notificationWidth: 420
     readonly property int notificationHeight: 76

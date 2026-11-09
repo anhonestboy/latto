@@ -18,11 +18,11 @@ PanelWindow {
     // Optional host surface. Standalone Latto keeps its original geometry;
     // a shell can supply a bar without duplicating the island or its services.
     property Component barComponent: null
-    property color barColor: "#08080a"
-    readonly property bool integrated: barComponent !== null
+    property color barColor: "#000000"  // locale: nero come il notch
+    readonly property bool integrated: true  // locale: notch attaccato anche senza barra host
     readonly property real centerWidth: pill.width
     readonly property int hostTopMargin: integrated ? 0 : Theme.topMargin
-    readonly property int hostCompactHeight: integrated ? 32 : Theme.compactHeight
+    readonly property int hostCompactHeight: Theme.notchHeight
     readonly property int hostNotificationWidth: integrated ? 320 : Theme.notificationWidth
 
     anchors {
@@ -32,7 +32,7 @@ PanelWindow {
     }
     // Room for the expanded pill plus its shadow.
     implicitHeight: hostTopMargin + Theme.expandedHeight + 48
-    exclusiveZone: integrated && !fullscreen ? hostCompactHeight : 0
+    exclusiveZone: -1  // locale: ignora la zona di waybar, nessuno spazio riservato
     // The keyboard only while a field is being typed into (a Wi-Fi password);
     // Hyprland won't hand an "on demand" overlay the keyboard, so it is taken
     // exclusively for that moment and given straight back.
@@ -57,7 +57,7 @@ PanelWindow {
         anchors.leftMargin: 0
         anchors.rightMargin: 0
         height: window.hostCompactHeight
-        visible: window.integrated && !window.fullscreen
+        visible: false  // locale: nessuna barra host
         sourceComponent: window.barComponent
     }
 
@@ -153,7 +153,7 @@ PanelWindow {
         width: 16 * growth
         height: width
         x: pill.x - width + 0.5
-        y: window.hostCompactHeight - 0.5
+        y: -0.5
         surfaceColor: window.barColor
         visible: window.integrated && !window.fullscreen && growth > 0
         opacity: pill.opacity
@@ -191,7 +191,7 @@ PanelWindow {
         anchors.horizontalCenter: parent.horizontalCenter
         transformOrigin: Item.Top
 
-        width: window.integrated ? 156 : Theme.idleWidth
+        width: Theme.notchWidth + (compact.hasIndicators ? 130 : 0)
         height: window.hostCompactHeight
         radius: window.hostCompactHeight / 2
         // The top remains attached to the bar throughout the spring morph.
@@ -219,7 +219,7 @@ PanelWindow {
                 name: "hidden"
                 PropertyChanges {
                     target: pill
-                    width: window.integrated ? 156 : Theme.dotSize
+                    width: Theme.notchWidth
                     height: window.integrated ? window.hostCompactHeight : Theme.dotSize
                     radius: window.integrated ? window.hostCompactHeight / 2 : Theme.dotSize / 2
                     reveal: 0
@@ -228,7 +228,7 @@ PanelWindow {
             },
             State {
                 name: "idle"
-                PropertyChanges { target: pill; width: window.integrated ? 156 : Theme.idleWidth }
+                PropertyChanges { target: pill; width: Theme.notchWidth + (compact.hasIndicators ? 130 : 0) }
             },
             State {
                 name: "media"
@@ -248,7 +248,7 @@ PanelWindow {
                 PropertyChanges {
                     target: pill
                     width: window.hostNotificationWidth
-                    height: Theme.notificationHeight
+                    height: Theme.notificationHeight + Theme.notchHeight
                     radius: Theme.notificationRadius
                 }
                 PropertyChanges { target: compact; opacity: 0; scale: 0.92; blur: Theme.hiddenBlur }
@@ -484,6 +484,7 @@ PanelWindow {
         NotificationPopup {
             id: popup
             anchors.top: parent.top
+            anchors.topMargin: Theme.notchHeight
             anchors.horizontalCenter: parent.horizontalCenter
             width: window.hostNotificationWidth
             height: Theme.notificationHeight
@@ -505,10 +506,10 @@ PanelWindow {
         ExpandedView {
             id: expandedView
             anchors.top: parent.top
-            anchors.topMargin: Theme.padding
+            anchors.topMargin: Theme.padding + Theme.notchHeight
             anchors.horizontalCenter: parent.horizontalCenter
             width: Theme.expandedWidth - 2 * Theme.padding
-            height: Theme.expandedHeight - 2 * Theme.padding
+            height: Theme.expandedHeight - 2 * Theme.padding - Theme.notchHeight
             transformOrigin: Item.Top
             opacity: 0
             scale: 0.92
