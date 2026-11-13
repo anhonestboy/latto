@@ -54,6 +54,12 @@ QtObject {
     readonly property int notchWidth: 190
     readonly property int notchHeight: 32
     readonly property int expandedHeight: 276 + notchHeight
+    // locale: "orecchie" ai lati del notch (musica, indicatori) e riga che scende sotto il
+    // notch per volume/luminosita'/avvisi: niente contenuto nella zona coperta dal notch
+    readonly property int earWidth: 65
+    readonly property int dropRowHeight: 38
+    readonly property int dropWidth: 380
+    readonly property int dropRadius: 19
     readonly property int expandedRadius: 34
     readonly property int notificationWidth: 420
     readonly property int notificationHeight: 76

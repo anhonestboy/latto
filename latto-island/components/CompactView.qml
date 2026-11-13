@@ -75,8 +75,13 @@ Item {
 
         property bool shown: false
         property real blur: shown ? 0 : Theme.swapBlur
+        // locale: true = il contenuto sta nella riga sotto il notch, non nella striscia del notch
+        property bool drop: false
 
-        anchors.fill: parent
+        x: 0
+        y: drop ? Theme.notchHeight : 0
+        width: parent.width
+        height: drop ? Theme.dropRowHeight : parent.height
         opacity: shown ? 1 : 0
         scale: shown ? 1 : 0.9
         visible: opacity > 0
@@ -269,35 +274,34 @@ Item {
         }
     }
 
+    // locale: copertina nell'orecchio sinistro, equalizzatore (e pallini privacy) nel destro.
+    // Il titolo starebbe sotto il notch: si legge aprendo l'isola.
     Layer {
         shown: root.mode === "media"
 
         RoundedImage {
             id: smallArt
             anchors.left: parent.left
-            anchors.leftMargin: 6
+            anchors.leftMargin: 14
             anchors.verticalCenter: parent.verticalCenter
-            width: 24
-            height: 24
-            radius: 8
+            width: 22
+            height: 22
+            radius: 7
             source: Media.art
         }
-        Label {
+        Icon {
             anchors.left: smallArt.right
-            anchors.leftMargin: 10
-            anchors.right: privacyDots.left
-            anchors.rightMargin: 12
+            anchors.leftMargin: 7
             anchors.verticalCenter: parent.verticalCenter
-            text: Media.title
-            font.pixelSize: Theme.fontSmall + 1
-            font.weight: Font.Medium
-            elide: Text.ElideRight
+            name: "music"
+            size: 13
+            color: Theme.accent
         }
         // Microphone (orange) and camera (green) in use, as small dots.
         Row {
             id: privacyDots
             anchors.right: visualizer.left
-            anchors.rightMargin: visible ? 10 : 0
+            anchors.rightMargin: visible ? 8 : 0
             anchors.verticalCenter: parent.verticalCenter
             spacing: 4
             visible: root.microphoneShown || root.cameraShown
@@ -320,7 +324,7 @@ Item {
         Visualizer {
             id: visualizer
             anchors.right: parent.right
-            anchors.rightMargin: 15
+            anchors.rightMargin: 16
             anchors.verticalCenter: parent.verticalCenter
             active: Media.playing
         }
@@ -331,6 +335,7 @@ Item {
         id: claudeLayer
 
         shown: root.mode === "claude"
+        drop: true
 
         readonly property var session: Claude.current
         readonly property color agentColor: Theme.agentColor(session && session.agent ? session.agent : "claude")
@@ -423,6 +428,7 @@ Item {
 
     Layer {
         shown: root.mode === "alert"
+        drop: true
 
         Icon {
             id: alertIcon

@@ -191,7 +191,7 @@ PanelWindow {
         anchors.horizontalCenter: parent.horizontalCenter
         transformOrigin: Item.Top
 
-        width: Theme.notchWidth + (compact.hasIndicators ? 130 : 0)
+        width: Theme.notchWidth + (compact.hasIndicators ? 2 * Theme.earWidth : 0)
         height: window.hostCompactHeight
         radius: window.hostCompactHeight / 2
         // The top remains attached to the bar throughout the spring morph.
@@ -228,19 +228,31 @@ PanelWindow {
             },
             State {
                 name: "idle"
-                PropertyChanges { target: pill; width: Theme.notchWidth + (compact.hasIndicators ? 130 : 0) }
+                PropertyChanges { target: pill; width: Theme.notchWidth + (compact.hasIndicators ? 2 * Theme.earWidth : 0) }
             },
+            // locale: la musica sta nelle orecchie ai lati del notch
             State {
                 name: "media"
-                PropertyChanges { target: pill; width: Theme.activityWidth }
+                PropertyChanges { target: pill; width: Theme.notchWidth + 2 * Theme.earWidth }
             },
+            // locale: avvisi (volume, luminosita'...) e agent scendono in una riga sotto il notch
             State {
                 name: "alert"
-                PropertyChanges { target: pill; width: Theme.activityWidth }
+                PropertyChanges {
+                    target: pill
+                    width: Theme.dropWidth
+                    height: window.hostCompactHeight + Theme.dropRowHeight
+                    radius: Theme.dropRadius
+                }
             },
             State {
                 name: "claude"
-                PropertyChanges { target: pill; width: Theme.activityWidth }
+                PropertyChanges {
+                    target: pill
+                    width: Theme.dropWidth
+                    height: window.hostCompactHeight + Theme.dropRowHeight
+                    radius: Theme.dropRadius
+                }
             },
 
             State {

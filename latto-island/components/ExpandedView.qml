@@ -21,7 +21,8 @@ Item {
         timers: { icon: "timer", label: "Timers", file: "TimersTab.qml" },
         clipboard: { icon: "clipboard", label: "Clipboard", file: "ClipboardTab.qml" },
         calendar: { icon: "calendar", label: "Calendar", file: "CalendarTab.qml" },
-        overview: { icon: "grid", label: "Overview", file: "OverviewTab.qml" }
+        overview: { icon: "grid", label: "Overview", file: "OverviewTab.qml" },
+        tray: { icon: "cloud", label: "Tray", file: "TrayTab.qml" }
     })
 
     readonly property var enabledTabs: Settings.tabs.filter(name => tabs[name] !== undefined)
