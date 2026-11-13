@@ -1,4 +1,5 @@
 import QtQuick
+import "../services"
 import "../theme"
 
 // One icon segment of the expanded view's tab bar. The sliding highlight
@@ -37,6 +38,6 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: root.activated()
+        onClicked: { Sfx.play("click"); root.activated(); }
     }
 }

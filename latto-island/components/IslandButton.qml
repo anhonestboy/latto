@@ -1,4 +1,5 @@
 import QtQuick
+import "../services"
 import "../theme"
 
 // Round button showing an icon, a text label, or both. Hover tints it, press
@@ -63,6 +64,6 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: root.clicked()
+        onClicked: { Sfx.play("click"); root.clicked(); }
     }
 }

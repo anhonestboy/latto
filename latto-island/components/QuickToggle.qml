@@ -1,4 +1,5 @@
 import QtQuick
+import "../services"
 import "../theme"
 
 // A round quick-toggle with a label underneath. `checked` fills it with
@@ -70,6 +71,6 @@ Item {
         enabled: root.available
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: root.clicked()
+        onClicked: { Sfx.play(root.checkable ? (root.checked ? "switch-off" : "switch-on") : "click"); root.clicked(); }
     }
 }

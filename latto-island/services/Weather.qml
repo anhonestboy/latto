@@ -16,14 +16,14 @@ QtObject {
     property string condition: ""
 
     function describe(code) {
-        if (code === 0) return "Clear";
-        if (code <= 3) return "Partly cloudy";
-        if (code <= 48) return "Fog";
-        if (code <= 57) return "Drizzle";
-        if (code <= 67) return "Rain";
-        if (code <= 77) return "Snow";
-        if (code <= 82) return "Showers";
-        if (code <= 99) return "Thunderstorm";
+        if (code === 0) return "Sereno";
+        if (code <= 3) return "Poco nuvoloso";
+        if (code <= 48) return "Nebbia";
+        if (code <= 57) return "Pioviggine";
+        if (code <= 67) return "Pioggia";
+        if (code <= 77) return "Neve";
+        if (code <= 82) return "Rovesci";
+        if (code <= 99) return "Temporale";
         return "";
     }
 
